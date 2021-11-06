@@ -47,51 +47,51 @@ class TestTree(unittest.TestCase):
             Node("Scene", Node("Robot", Node("Flange", Node("Gripper", Leaf("Object"))), Leaf("Camera")), Node("Table", Leaf("Box")))
         ]
         expected = [
-            "Scene"]
-        #     "Scene\n  Table\n  Object",
-        #     "Scene\n  Robot\n    Flange\n      Gripper\n        Object\n    Camera\n  Table\n    Box"
-        # ]
+            "Scene",
+            "Scene\n  Table\n  Object",
+            "Scene\n  Robot\n    Flange\n      Gripper\n        Object\n    Camera\n  Table\n    Box"
+        ]
         visitor = PrintTree(NodeStyle.INDENT)
 
         for i, c in enumerate(zip(trees, expected)):
             with self.subTest(i=i):
                 self.assertEqual(visitor.traverse(c[0]), c[1])
 
-    # @unittest.skipIf(functionality_tests_off, "toggled off by user")
-    # def test_print_visitor_bullet(self):
-    #     trees = [
-    #         Leaf("Scene"),
-    #         Node("Scene", Leaf("Table"), Leaf("Object")),
-    #         Node("Scene", Node("Robot", Node("Flange", Node("Gripper", Leaf("Object"))), Leaf("Camera")), Node("Table", Leaf("Box")))
-    #     ]
-    #     expected = [
-    #         "* Scene",
-    #         "* Scene\n  * Table\n  * Object",
-    #         "* Scene\n  * Robot\n    * Flange\n      * Gripper\n        * Object\n    * Camera\n  * Table\n    * Box"
-    #     ]
-    #     visitor = PrintTree(NodeStyle.BULLET)
+    @unittest.skipIf(functionality_tests_off, "toggled off by user")
+    def test_print_visitor_bullet(self):
+        trees = [
+            Leaf("Scene"),
+            Node("Scene", Leaf("Table"), Leaf("Object")),
+            Node("Scene", Node("Robot", Node("Flange", Node("Gripper", Leaf("Object"))), Leaf("Camera")), Node("Table", Leaf("Box")))
+        ]
+        expected = [
+            "* Scene",
+            "* Scene\n  * Table\n  * Object",
+            "* Scene\n  * Robot\n    * Flange\n      * Gripper\n        * Object\n    * Camera\n  * Table\n    * Box"
+        ]
+        visitor = PrintTree(NodeStyle.BULLET)
 
-    #     for i, c in enumerate(zip(trees, expected)):
-    #         with self.subTest(i=i):
-    #             self.assertEqual(visitor.traverse(c[0]), c[1])
+        for i, c in enumerate(zip(trees, expected)):
+            with self.subTest(i=i):
+                self.assertEqual(visitor.traverse(c[0]), c[1])
 
-    # @unittest.skipIf(functionality_tests_off, "toggled off by user")
-    # def test_print_visitor_tree(self):
-    #     trees = [
-    #         Leaf("Scene"),
-    #         Node("Scene", Leaf("Table"), Leaf("Object")),
-    #         Node("Scene", Node("Robot", Node("Flange", Node("Gripper", Leaf("Object"))), Leaf("Camera")), Node("Table", Leaf("Box")))
-    #     ]
-    #     expected = [
-    #         "─╼ Scene",
-    #         " ╿ Scene\n ├─╼ Table\n └─╼ Object",
-    #         " ╿ Scene\n ├─┮ Robot\n │ ├─┮ Flange\n │ │ └─┮ Gripper\n │ │   └─╼ Object\n │ └─╼ Camera\n └─┮ Table\n   └─╼ Box"
-    #     ]
-    #     visitor = PrintTree(NodeStyle.TREE)
+    @unittest.skipIf(functionality_tests_off, "toggled off by user")
+    def test_print_visitor_tree(self):
+        trees = [
+            Leaf("Scene"),
+            Node("Scene", Leaf("Table"), Leaf("Object")),
+            Node("Scene", Node("Robot", Node("Flange", Node("Gripper", Leaf("Object"))), Leaf("Camera")), Node("Table", Leaf("Box")))
+        ]
+        expected = [
+            "─╼ Scene",
+            " ╿ Scene\n ├─╼ Table\n └─╼ Object",
+            " ╿ Scene\n ├─┮ Robot\n │ ├─┮ Flange\n │ │ └─┮ Gripper\n │ │   └─╼ Object\n │ └─╼ Camera\n └─┮ Table\n   └─╼ Box"
+        ]
+        visitor = PrintTree(NodeStyle.TREE)
 
-    #     for i, c in enumerate(zip(trees, expected)):
-    #         with self.subTest(i=i):
-    #             self.assertEqual(visitor.traverse(c[0]), c[1])
+        for i, c in enumerate(zip(trees, expected)):
+            with self.subTest(i=i):
+                self.assertEqual(visitor.traverse(c[0]), c[1])
 
     # @unittest.skipIf(functionality_tests_off, "toggled off by user")
     # def test_print_expression_tree(self):
