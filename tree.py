@@ -4,18 +4,28 @@ from typing import Type
 
 class Node():
     def __init__(self, name, *args):
-        self.parent = None
-        self.children = []
         if len(args) == 0: # 0 children, i.e. should have been a leaf
             raise TypeError
 
+        self.parent = None
+        self.children = []
         self.name = name
+
         for child in args:
             self.children.append(child)
             child.parent = self
 
     def accept(self):
         pass
+
+
+    def depth(self):
+        depth = 0
+        n = self
+        while n.parent != None:
+            depth += 1
+            n = n.parent
+        return depth
 
 
 class Leaf(Node):
