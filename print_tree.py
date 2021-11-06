@@ -4,14 +4,7 @@ from enum import Enum
 class NodeStyle(Enum):
     INDENT = 1
     BULLET = 2
-
-
-
-# ╿ Scene
-#  ├─┮ Robot
-#  │ ├─┮ Flange
-#  │ │ └─┮ Gripper
-#  │ │   └─╼ Objec
+    TREE = 3
 
 class PrintTree(Visitor):
     def __init__(self, node_style):
@@ -35,30 +28,50 @@ class PrintTree(Visitor):
         for child in start_node.children:
             self.traverseInternal(child)
 
+    def forwarder(self, node):
+        self.output_string = ""
+        self.traverseFolderStructureWay(node)
+        return self.output_string
+
+    # not quite working... yet!
+    def traverseFolderStructureWay(self, node : Node):
+        if node.depth() > 1:
+            for i in range(1,node.depth()):
+                self.output_string += " │  "
+
+        if type(node) == Leaf:
+            if node.parent == None: #
+                self.output_string += f"─╼ {node.name}"
+            elif node.parent.children[-1] == node: # last element in current branch
+                self.output_string += f"└─╼ {node.name}\n"
+            else: # we must be a leaf node on the middle of a branch
+                self.output_string += f" ├─╼ {node.name}\n"
+            return
+        else: # we are a regular node
+            if node.isRoot():
+                self.output_string += f" ╿ {node.name}\n"
+            elif node.parent.children[-1] == node: # last element in current branch
+                self.output_string += f" └─┮ {node.name}\n"
+            else: # regular node middle of a branch
+                self.output_string += f" ├─┮ {node.name}\n"
+
+        for child in node.children:
+            self.traverseFolderStructureWay(child)
+
+
 if __name__ == "__main__":
+    tree = Leaf("Scene")
     tree = Node("Scene", Leaf("Table"), Leaf("Object"))
     tree = Node("Scene", Node("Robot", Node("Flange", Node("Gripper", Leaf("Object"))), Leaf("Camera")), Node("Table", Leaf("Box")))
-    
-    trees = [
-        Leaf("Scene"),
-        Node("Scene", Leaf("Table"), Leaf("Object")),
-        Node("Scene", Node("Robot", Node("Flange", Node("Gripper", Leaf("Object"))), Leaf("Camera")), Node("Table", Leaf("Box")))
-    ]
-    expected = [
-        "Scene",
-        "Scene\n  Table\n  Object",
-        "Scene\n  Robot\n    Flange\n      Gripper\n        Object\n    Camera\n  Table\n    Box"
-    ]
 
-    visitor = PrintTree(NodeStyle.INDENT)
+    pt = PrintTree(NodeStyle.TREE)
 
-    result = visitor.traverse(trees[1])
-    print(result)
+    output = pt.forwarder(tree)
+    print(output)
 
-    # for i, c in enumerate(zip(trees, expected)):
-    #     print(f"{i} -- {c}")
-    #         # with self.subTest(i=i):
-    #         #     self.assertEqual(visitor.traverse(c[0]), c[1])
+ 
+
+
 
 
 

@@ -18,7 +18,6 @@ class Node():
     def accept(self):
         pass
 
-
     def depth(self):
         depth = 0
         n = self
@@ -27,14 +26,14 @@ class Node():
             n = n.parent
         return depth
 
+    def isRoot(self):
+        return self.parent == None
+
 
 class Leaf(Node):
     parent = None
     def __init__(self, name):
         self.name = name
-
-    
-
 
 class Visitor():
     def traverse(self):
@@ -43,13 +42,8 @@ class Visitor():
     def visit(self):
         pass
 
-
-
-
 if __name__ == "__main__":
     n = Node("Scene", Node("Robot", Node("Flange", Node("Gripper", Leaf("Object"))), Leaf("Camera")), Node("Table", Leaf("Box")))
-    # print(n.name)
 
-    # print(len(n.children))
     for child in n.children:
         print(child.name)
