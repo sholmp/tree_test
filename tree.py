@@ -3,13 +3,14 @@ from typing import Type
 
 
 class Node():
-    children = []
-    parent = None
-    def __init__(self, name, *children):
-        if len(children) == 0: # 0 children, i.e. should have been a leaf
+    def __init__(self, name, *args):
+        self.parent = None
+        self.children = []
+        if len(args) == 0: # 0 children, i.e. should have been a leaf
             raise TypeError
+
         self.name = name
-        for child in children:
+        for child in args:
             self.children.append(child)
             child.parent = self
 
@@ -35,36 +36,10 @@ class Visitor():
 
 
 
+if __name__ == "__main__":
+    n = Node("Scene", Node("Robot", Node("Flange", Node("Gripper", Leaf("Object"))), Leaf("Camera")), Node("Table", Leaf("Box")))
+    # print(n.name)
 
-
-
-
-
-
-
-
-
-
-
-
-# class SelfRef():
-#     name = ""
-#     child = None
-#     parent = None
-
-#     def __init__(self, name, child = None):
-#         self.name = name
-#         if child:
-#             self.child = child
-#             child.parent = self
-
-
-# if __name__ == "__main__":
-    
-
-#     c = SelfRef("foo")
-#     p = SelfRef("par", c)
-
-
-#     print(p.child.name)
-#     print(c.parent.name)
+    # print(len(n.children))
+    for child in n.children:
+        print(child.name)
