@@ -1,24 +1,13 @@
 from tree import Node, Leaf, Visitor
 from enum import Enum
 
+from indentation_symbols import TreeStyleSymbols as tss
+
 class NodeStyle(Enum):
     INDENT = 1
     BULLET = 2
     TREE = 3
-
-
-vertical_line = '│ '
-dead_space = '  '
-
-root_symbol = '╿'
-root_alone_symbol = '─╼'
-
-node_not_last_child = '├─┮'
-node_last_child = '└─┮'
-
-leaf_not_last_child = '├─╼'
-leaf_last_child = '└─╼'
-
+    
 class PrintTree(Visitor):
     def __init__(self, node_style: NodeStyle):
         if node_style == NodeStyle.INDENT:
@@ -27,6 +16,11 @@ class PrintTree(Visitor):
             self.visitorFunction = self.printWithBullet
         elif node_style == NodeStyle.TREE:
             self.visitorFunction = self.printWithTreeStyle
+        else:
+            self.visitorFunction = self.doNothing
+
+    def doNothing():
+        pass
 
     def printWithIndent(self, node: Node):
         self.output_string += '  ' * node.depth() + node.name + '\n'
@@ -38,29 +32,29 @@ class PrintTree(Visitor):
         line = ""
         if node.isRoot():
             if len(node.children) == 0:
-                line = f"{root_alone_symbol} {node.name}\n"
+                line = f"{tss.root_alone_symbol} {node.name}\n"
             else:
-                line = f" {root_symbol} {node.name}\n "
+                line = f" {tss.root_symbol} {node.name}\n "
             
         elif type(node) == Node:
             if node.parent.children[-1] == node: #last node on parents children
-                line = f"{node_last_child} {node.name}\n "
+                line = f"{tss.node_last_child} {node.name}\n "
             else: #not last node of parents children
-                line = f"{node_not_last_child} {node.name}\n "
+                line = f"{tss.node_not_last_child} {node.name}\n "
 
         elif type(node) == Leaf:
             if node.parent.children[-1] == node: #last node on parents children
-                line = f"{leaf_last_child} {node.name}\n "
+                line = f"{tss.leaf_last_child} {node.name}\n "
             else: #not the last leaf
-                line = f"{leaf_not_last_child} {node.name}\n "
+                line = f"{tss.leaf_not_last_child} {node.name}\n "
 
         # add vertical lines or spaces
         temp = node
         while temp.depth() >= 2:
             if temp.parent == temp.parent.parent.children[-1]: # last child in parent's parent's children
-                line = dead_space + line
+                line = tss.dead_space + line
             else:
-                line = vertical_line + line
+                line = tss.vertical_line + line
             temp = temp.parent
            
         self.output_string += line
@@ -97,67 +91,4 @@ if __name__ == "__main__":
     print(pt.traverse(tree2))
     print("-----")
     print(pt.traverse(tree3))
-
-
- 
-
-
-
-
-
-
-# def printNodeNameNothingElse(node: Node):
-#     print(node.name)
-
-# class PrintTree(Visitor):
-#     def __init__(self, node_style):
-#         self.node_style = node_style
-#         if node_style == NodeStyle.INDENT:
-#             self.prefix_token = ''
-#         elif node_style == NodeStyle.BULLET:
-#             self.prefix_token = '* '
-
-#     def traverse(self, start_node: Node):
-#         self.output_string = ""
-#         self.traverseInternal(start_node)
-#         self.output_string = self.output_string[:-1] # strip final new line to pass testcase
-#         return self.output_string
-
-#     def traverseInternal(self, start_node):
-#         self.output_string += '  ' * start_node.depth() + self.prefix_token + start_node.name + '\n'
-
-#         if type(start_node) == Leaf:
-#             return
-#         for child in start_node.children:
-#             self.traverseInternal(child)
-
-#     def forwarder(self, node):
-#         self.output_string = ""
-#         self.traverseFolderStructureWay(node)
-#         return self.output_string
-
-#     # not quite working... yet!
-#     def traverseFolderStructureWay(self, node : Node):
-#         if node.depth() > 1:
-#             for i in range(1,node.depth()):
-#                 self.output_string += " │  "
-
-#         if type(node) == Leaf:
-#             if node.parent == None: #
-#                 self.output_string += f"─╼ {node.name}"
-#             elif node.parent.children[-1] == node: # last element in current branch
-#                 self.output_string += f"└─╼ {node.name}\n"
-#             else: # we must be a leaf node on the middle of a branch
-#                 self.output_string += f" ├─╼ {node.name}\n"
-#             return
-#         else: # we are a regular node
-#             if node.isRoot():
-#                 self.output_string += f" ╿ {node.name}\n"
-#             elif node.parent.children[-1] == node: # last element in current branch
-#                 self.output_string += f" └─┮ {node.name}\n"
-#             else: # regular node middle of a branch
-#                 self.output_string += f" ├─┮ {node.name}\n"
-
-#         for child in node.children:
-#             self.traverseFolderStructureWay(child)
 
