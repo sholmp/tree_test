@@ -5,6 +5,7 @@ import copy
 
 
 class Node():
+    children = []
     def __init__(self, name, *args):
         if len(args) == 0: # 0 children, i.e. should have been a leaf
             raise TypeError

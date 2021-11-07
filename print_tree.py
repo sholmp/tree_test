@@ -8,9 +8,10 @@ class NodeStyle(Enum):
 
 
 vertical_line = '│ '
-space = '  '
+dead_space = '  '
 
 root_symbol = '╿'
+root_alone_symbol = '─╼'
 
 node_not_last_child = '├─┮'
 node_last_child = '└─┮'
@@ -19,12 +20,27 @@ leaf_not_last_child = '├─╼'
 leaf_last_child = '└─╼'
 
 class PrintTree(Visitor):
+    def __init__(self, node_style: NodeStyle):
+        if node_style == NodeStyle.INDENT:
+            self.visitorFunction = self.printWithIndent
+        elif node_style == NodeStyle.BULLET:
+            self.visitorFunction = self.printWithBullet
+        elif node_style == NodeStyle.TREE:
+            self.visitorFunction = self.printWithTreeStyle
 
-    output = ""
-    def traverseTreeStyle(self, node):
+    def printWithIndent(self, node: Node):
+        self.output_string += '  ' * node.depth() + node.name + '\n'
+    
+    def printWithBullet(self, node: Node):
+        self.output_string += '  ' * node.depth() + '* ' + node.name + '\n'
+
+    def printWithTreeStyle(self, node):
         line = ""
         if node.isRoot():
-            line = f" {root_symbol} {node.name}\n "
+            if len(node.children) == 0:
+                line = f"{root_alone_symbol} {node.name}\n"
+            else:
+                line = f" {root_symbol} {node.name}\n "
             
         elif type(node) == Node:
             if node.parent.children[-1] == node: #last node on parents children
@@ -42,37 +58,23 @@ class PrintTree(Visitor):
         temp = node
         while temp.depth() >= 2:
             if temp.parent == temp.parent.parent.children[-1]: # last child in parent's parent's children
-                line = space + line
+                line = dead_space + line
             else:
                 line = vertical_line + line
             temp = temp.parent
            
-        self.output += line
-        if type(node) == Leaf:
-            return
-        for child in node.children:
-            self.traverseTreeStyle(child)
+        self.output_string += line
+        # if type(node) == Leaf:
+        #     return
+        # for child in node.children:
+        #     self.traverseTreeStyle(child)
 
-    
-
-    def __init__(self, node_style: NodeStyle):
-        if node_style == NodeStyle.INDENT:
-            self.visitorFunction = self.printWithIndent
-        elif node_style == NodeStyle.BULLET:
-            self.visitorFunction = self.printWithBullet
-
-    def printWithIndent(self, node: Node):
-        self.output_string += '  ' * node.depth() + node.name + '\n'
-    
-    def printWithBullet(self, node: Node):
-        self.output_string += '  ' * node.depth() + '* ' + node.name + '\n'
-
-    
+        
 
     def traverse(self, node: Node):
         self.output_string = ""
         self.traverseInternal(node)
-        return self.output_string[:-1]
+        return self.output_string.rstrip() #remove trailing newline (also removes a trailing space applying to tree style visitor)
 
     def traverseInternal(self, node: Node):
         node.accept(self)
@@ -88,19 +90,18 @@ class PrintTree(Visitor):
 
 
 if __name__ == "__main__":
-    tree = Leaf("Scene")
-    tree = Node("Scene", Leaf("Table"), Leaf("Object"))
-    tree = Node("Scene", Node("Robot", Node("Flange", Node("Gripper", Leaf("Object"))), Leaf("Camera")), Node("Table", Leaf("Box")))
+    tree1 = Leaf("Scene")
+    tree2 = Node("Scene", Leaf("Table"), Leaf("Object"))
+    tree3 = Node("Scene", Node("Robot", Node("Flange", Node("Gripper", Leaf("Object"))), Leaf("Camera")), Node("Table", Leaf("Box")))
 
-    pt = PrintTree(NodeStyle.INDENT)
+    pt = PrintTree(NodeStyle.TREE)
+    # pt = PrintTree(NodeStyle.BULLET)
 
-    # print(pt.traverse(tree))
-
-
-
-    pt.traverseTreeStyle(tree)
-    # pt.forwarder(tree)
-    print(pt.output)
+    print(pt.traverse(tree1))
+    print("-----")
+    print(pt.traverse(tree2))
+    print("-----")
+    print(pt.traverse(tree3))
 
 
  
