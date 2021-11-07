@@ -79,16 +79,19 @@ class PrintTree(Visitor):
 
 
 if __name__ == "__main__":
-    tree1 = Leaf("Scene")
-    tree2 = Node("Scene", Leaf("Table"), Leaf("Object"))
+    # tree1 = Leaf("Scene")
+    # tree2 = Node("Scene", Leaf("Table"), Leaf("Object"))
     tree3 = Node("Scene", Node("Robot", Node("Flange", Node("Gripper", Leaf("Object"))), Leaf("Camera")), Node("Table", Leaf("Box")))
 
-    pt = PrintTree(NodeStyle.TREE)
-    # pt = PrintTree(NodeStyle.BULLET)
+    pt1 = PrintTree(NodeStyle.INDENT)
+    pt2 = PrintTree(NodeStyle.BULLET)
+    pt3 = PrintTree(NodeStyle.TREE)
 
-    print(pt.traverse(tree1))
-    print("-----")
-    print(pt.traverse(tree2))
-    print("-----")
-    print(pt.traverse(tree3))
+    
+    print("-" * 5 + "Indent style" + "-" * 5)
+    print(pt1.traverse(tree3))
+    print("\n" + "-" * 5 + "Bullet style" + "-" * 5)
+    print(pt2.traverse(tree3))
+    print("\n" + "-" * 5 + "Tree style" + "-" * 5)
+    print(pt3.traverse(tree3))
 
