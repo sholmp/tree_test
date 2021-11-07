@@ -7,7 +7,8 @@ class NodeStyle(Enum):
     TREE = 3
 
 
-vertical_line = '│'
+vertical_line = '│ '
+space = '  '
 
 root = '╿'
 
@@ -24,27 +25,33 @@ class PrintTree(Visitor):
         line = ""
         if node.isRoot():
             line = root + node.name + '\n'
-            self.output += line
             
         elif type(node) == Node:
             if node.parent.children[-1] == node: #last node on parents children
                 line = node_last_child + node.name + '\n'
             else: #not last node of parents children
                 line = node_not_last_child + node.name + '\n'
-            self.output += line
 
         elif type(node) == Leaf:
             if node.parent.children[-1] == node: #last node on parents children
                 line = leaf_last_child + node.name + '\n'
             else: #not the last leaf
                 line = leaf_not_last_child + node.name + '\n'
-            self.output += line
+
+        # add vertical lines or spaces
+        temp = node
+        while temp.depth() >= 2:
+            if temp.parent == temp.parent.parent.children[-1]: # last child in parent's parent's children
+                line = space + line
+            else:
+                line = vertical_line + line
+            temp = temp.parent
+           
+        self.output += line
+        if type(node) == Leaf:
             return
-
-
         for child in node.children:
             self.traverseTreeStyle(child)
-
 
 
     def __init__(self, node_style: NodeStyle):
@@ -82,7 +89,7 @@ class PrintTree(Visitor):
 if __name__ == "__main__":
     tree = Leaf("Scene")
     tree = Node("Scene", Leaf("Table"), Leaf("Object"))
-    # tree = Node("Scene", Node("Robot", Node("Flange", Node("Gripper", Leaf("Object"))), Leaf("Camera")), Node("Table", Leaf("Box")))
+    tree = Node("Scene", Node("Robot", Node("Flange", Node("Gripper", Leaf("Object"))), Leaf("Camera")), Node("Table", Leaf("Box")))
 
     pt = PrintTree(NodeStyle.INDENT)
 
