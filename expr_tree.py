@@ -21,13 +21,18 @@ class Float(Leaf):
 
 class Add(Node):
     def __init__(self, *args):
-        super().__init__("Add", args)
+        name = "Add"
+        super().__init__(name, *args)
 
 if __name__ == "__main__":
     i = Integer(123)
 
     f = Float(5.0)
-    print(f.name)
-    print(i.name)
 
     a = Add(i,f)
+
+    print(issubclass(type(a), Node))
+    print(issubclass(type(f), Node))
+
+
+

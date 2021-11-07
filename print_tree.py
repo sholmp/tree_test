@@ -36,13 +36,13 @@ class PrintTree(Visitor):
             else:
                 line = f" {tss.root_symbol} {node.name}\n "
             
-        elif type(node) == Node:
+        elif issubclass(type(node), Node):
             if node.parent.children[-1] == node: #last node on parents children
                 line = f"{tss.node_last_child} {node.name}\n "
             else: #not last node of parents children
                 line = f"{tss.node_not_last_child} {node.name}\n "
 
-        elif type(node) == Leaf:
+        elif issubclass(type(node), Leaf):
             if node.parent.children[-1] == node: #last node on parents children
                 line = f"{tss.leaf_last_child} {node.name}\n "
             else: #not the last leaf

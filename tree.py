@@ -2,19 +2,7 @@
 from abc import abstractmethod
 from typing import Type
 
-class Node():
-    def __init__(self, name, *args):
-        if len(args) == 0: # 0 children, i.e. should have been a leaf
-            raise TypeError
-
-        self.parent = None
-        self.children = []
-        self.name = name
-
-        for child in args:
-            self.children.append(child)
-            child.parent = self
-
+class LeafNodeCommonality():
     def accept(self, visitor):
         visitor.visit(self)
 
@@ -30,7 +18,20 @@ class Node():
         return self.parent == None
 
 
-class Leaf(Node):
+class Node(LeafNodeCommonality):
+    def __init__(self, name, *args):
+        if len(args) == 0: # 0 children, i.e. should have been a leaf
+            raise TypeError
+
+        self.parent = None
+        self.children = []
+        self.name = name
+
+        for child in args:
+            self.children.append(child)
+            child.parent = self
+
+class Leaf(LeafNodeCommonality):
     def __init__(self, name):
         self.name = name
         self.children = []
