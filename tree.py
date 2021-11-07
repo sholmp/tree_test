@@ -1,11 +1,8 @@
 
 from abc import abstractmethod
 from typing import Type
-import copy
-
 
 class Node():
-    children = []
     def __init__(self, name, *args):
         if len(args) == 0: # 0 children, i.e. should have been a leaf
             raise TypeError
@@ -34,22 +31,19 @@ class Node():
 
 
 class Leaf(Node):
-    parent = None
     def __init__(self, name):
         self.name = name
+        self.children = []
+        self.parent = None
 
 class Visitor():
     @abstractmethod
     def visit(self, node: Node):
         raise NotImplementedError
-
+        
     @abstractmethod
     def traverse(self, node: Node):
-        node.accept(self)
-        if type(node) == Leaf:
-            return
-        for child in node.children:
-            self.traverse(child)
+        raise NotImplementedError
 
 if __name__ == "__main__":
     pass

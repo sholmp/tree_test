@@ -64,12 +64,7 @@ class PrintTree(Visitor):
             temp = temp.parent
            
         self.output_string += line
-        # if type(node) == Leaf:
-        #     return
-        # for child in node.children:
-        #     self.traverseTreeStyle(child)
-
-        
+       
 
     def traverse(self, node: Node):
         self.output_string = ""
