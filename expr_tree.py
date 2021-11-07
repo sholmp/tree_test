@@ -18,11 +18,21 @@ class Float(Leaf):
         name = "Float(" + str(value) + ')'
         super().__init__(name)
 
-
 class Add(Node):
     def __init__(self, *args):
         name = "Add"
         super().__init__(name, *args)
+
+class Divide(Node):
+    def __init__(self, *args):
+        name = "Divide"
+        super().__init__(name, *args)
+
+class Multiply(Node):
+    def __init__(self, *args):
+        name = "Multiply"
+        super().__init__(name, *args)
+
 
 if __name__ == "__main__":
     i = Integer(123)
