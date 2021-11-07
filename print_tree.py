@@ -10,7 +10,7 @@ class NodeStyle(Enum):
 vertical_line = '│ '
 space = '  '
 
-root = '╿'
+root_symbol = '╿'
 
 node_not_last_child = '├─┮'
 node_last_child = '└─┮'
@@ -24,19 +24,19 @@ class PrintTree(Visitor):
     def traverseTreeStyle(self, node):
         line = ""
         if node.isRoot():
-            line = root + node.name + '\n'
+            line = f" {root_symbol} {node.name}\n "
             
         elif type(node) == Node:
             if node.parent.children[-1] == node: #last node on parents children
-                line = node_last_child + node.name + '\n'
+                line = f"{node_last_child} {node.name}\n "
             else: #not last node of parents children
-                line = node_not_last_child + node.name + '\n'
+                line = f"{node_not_last_child} {node.name}\n "
 
         elif type(node) == Leaf:
             if node.parent.children[-1] == node: #last node on parents children
-                line = leaf_last_child + node.name + '\n'
+                line = f"{leaf_last_child} {node.name}\n "
             else: #not the last leaf
-                line = leaf_not_last_child + node.name + '\n'
+                line = f"{leaf_not_last_child} {node.name}\n "
 
         # add vertical lines or spaces
         temp = node
@@ -53,6 +53,7 @@ class PrintTree(Visitor):
         for child in node.children:
             self.traverseTreeStyle(child)
 
+    
 
     def __init__(self, node_style: NodeStyle):
         if node_style == NodeStyle.INDENT:
