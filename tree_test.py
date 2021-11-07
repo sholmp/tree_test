@@ -3,7 +3,7 @@ import inspect
 
 from tree import Leaf, Node, Visitor
 from print_tree import PrintTree, NodeStyle
-# from expr_tree import EvaluateExpression, PrintExpression, Add, Integer, Divide, Multiply, Float, Negative
+from expr_tree import EvaluateExpression, PrintExpression #,Add, Integer, Divide, Multiply, Float, Negative
 
 functionality_tests_off = False
 
@@ -36,8 +36,8 @@ class TestTree(unittest.TestCase):
 
         with self.subTest(i=2):
             self.assertTrue(issubclass(PrintTree, Visitor))
-            # self.assertTrue(issubclass(PrintExpression, Visitor))
-            # self.assertTrue(issubclass(EvaluateExpression, Visitor))
+            self.assertTrue(issubclass(PrintExpression, Visitor))
+            self.assertTrue(issubclass(EvaluateExpression, Visitor))
 
     @unittest.skipIf(functionality_tests_off, "toggled off by user")
     def test_print_visitor_indent(self):
