@@ -7,8 +7,46 @@ class NodeStyle(Enum):
     TREE = 3
 
 
+vertical_line = '│'
+
+root = '╿'
+
+node_not_last_child = '├─┮'
+node_last_child = '└─┮'
+
+leaf_not_last_child = '├─╼'
+leaf_last_child = '└─╼'
 
 class PrintTree(Visitor):
+
+    output = ""
+    def traverseTreeStyle(self, node):
+        line = ""
+        if node.isRoot():
+            line = root + node.name + '\n'
+            self.output += line
+            
+        elif type(node) == Node:
+            if node.parent.children[-1] == node: #last node on parents children
+                line = node_last_child + node.name + '\n'
+            else: #not last node of parents children
+                line = node_not_last_child + node.name + '\n'
+            self.output += line
+
+        elif type(node) == Leaf:
+            if node.parent.children[-1] == node: #last node on parents children
+                line = leaf_last_child + node.name + '\n'
+            else: #not the last leaf
+                line = leaf_not_last_child + node.name + '\n'
+            self.output += line
+            return
+
+
+        for child in node.children:
+            self.traverseTreeStyle(child)
+
+
+
     def __init__(self, node_style: NodeStyle):
         if node_style == NodeStyle.INDENT:
             self.visitorFunction = self.printWithIndent
@@ -20,6 +58,8 @@ class PrintTree(Visitor):
     
     def printWithBullet(self, node: Node):
         self.output_string += '  ' * node.depth() + '* ' + node.name + '\n'
+
+    
 
     def traverse(self, node: Node):
         self.output_string = ""
@@ -35,6 +75,32 @@ class PrintTree(Visitor):
 
     def visit(self, node: Node):
         self.visitorFunction(node)
+
+
+
+
+if __name__ == "__main__":
+    tree = Leaf("Scene")
+    tree = Node("Scene", Leaf("Table"), Leaf("Object"))
+    # tree = Node("Scene", Node("Robot", Node("Flange", Node("Gripper", Leaf("Object"))), Leaf("Camera")), Node("Table", Leaf("Box")))
+
+    pt = PrintTree(NodeStyle.INDENT)
+
+    # print(pt.traverse(tree))
+
+
+
+    pt.traverseTreeStyle(tree)
+    # pt.forwarder(tree)
+    print(pt.output)
+
+
+ 
+
+
+
+
+
 
 # def printNodeNameNothingElse(node: Node):
 #     print(node.name)
@@ -90,25 +156,4 @@ class PrintTree(Visitor):
 
 #         for child in node.children:
 #             self.traverseFolderStructureWay(child)
-
-
-
-
-
-if __name__ == "__main__":
-    tree = Leaf("Scene")
-    tree = Node("Scene", Leaf("Table"), Leaf("Object"))
-    tree = Node("Scene", Node("Robot", Node("Flange", Node("Gripper", Leaf("Object"))), Leaf("Camera")), Node("Table", Leaf("Box")))
-
-    pt = PrintTree(NodeStyle.INDENT)
-
-    print(pt.traverse(tree))
-
-
-
- 
-
-
-
-
 
