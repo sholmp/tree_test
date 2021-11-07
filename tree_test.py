@@ -3,7 +3,7 @@ import inspect
 
 from tree import Leaf, Node, Visitor
 from print_tree import PrintTree, NodeStyle
-from expr_tree import EvaluateExpression, PrintExpression, Add, Integer ,Divide, Multiply, Float #,Negative
+from expr_tree import EvaluateExpression, PrintExpression, Add, Integer ,Divide, Multiply, Float, Negative
 
 functionality_tests_off = False
 
@@ -97,17 +97,17 @@ class TestTree(unittest.TestCase):
     def test_print_expression_tree(self):
         expressions = [
             Integer(42),
-            # Negative(Integer(23)),
+            Negative(Integer(23)),
             Divide(Integer(5), Integer(2)),
-            # Divide(Float(5), Integer(2)),
-            # Add(Integer(2), Divide(Multiply(Float(5.0), Negative(Integer(3))), Float(10.0)))
+            Divide(Float(5), Integer(2)),
+            Add(Integer(2), Divide(Multiply(Float(5.0), Negative(Integer(3))), Float(10.0)))
         ]
         expected = [
             "* Integer(42)",
-            # "* Negative\n  * Integer(23)",
+            "* Negative\n  * Integer(23)",
             "* Divide\n  * Integer(5)\n  * Integer(2)",
             "* Divide\n  * Float(5.0)\n  * Integer(2)",
-            # "* Add\n  * Integer(2)\n  * Divide\n    * Multiply\n      * Float(5.0)\n      * Negative\n        * Integer(3)\n    * Float(10.0)"
+            "* Add\n  * Integer(2)\n  * Divide\n    * Multiply\n      * Float(5.0)\n      * Negative\n        * Integer(3)\n    * Float(10.0)"
         ]
         visitor = PrintTree(NodeStyle.BULLET)
 
