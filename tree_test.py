@@ -115,18 +115,18 @@ class TestTree(unittest.TestCase):
             with self.subTest(i=i):
                 self.assertEqual(visitor.traverse(c[0]), c[1])
 
-        # expected = [
-        #     "42",
-        #     "-23",
-        #     "5 / 2",
-        #     "5.0 / 2",
+        expected = [
+            "42",
+            "-23",
+            "5 / 2",
+            "5.0 / 2",]
         #     "2 + ((5.0 * -3) / 10.0)"
         # ]
 
-        # visitor = PrintExpression()
-        # for i, c in enumerate(zip(expressions, expected)):
-        #     with self.subTest(i=i + len(expressions)):
-        #         self.assertEqual(visitor.traverse(c[0]), c[1])
+        visitor = PrintExpression()
+        for i, c in enumerate(zip(expressions, expected)):
+            with self.subTest(i=i + len(expressions)):
+                self.assertEqual(visitor.traverse(c[0]), c[1])
 
     # @unittest.skipIf(functionality_tests_off, "toggled off by user")
     # def test_evaluate_expression_tree(self):
